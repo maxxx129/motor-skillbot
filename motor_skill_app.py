@@ -10,7 +10,7 @@ df = pd.read_csv(url)
 df.rename(columns={'RT': 'Button_Release_Time'}, inplace=True)
 df['Total_Time'] = df['Button_Release_Time'] + df['Total_MT']
 
-st.title("🎮 Welcome to MotorSkillBot!")
+st.title("🤾‍♀️ Welcome to MotorSkillBot!")
 st.markdown("Let's analyze some motor skills response time data! 💪🧠")
 
 # Main menu
