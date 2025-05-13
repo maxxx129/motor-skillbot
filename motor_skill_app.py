@@ -80,31 +80,30 @@ elif option == "Which plot would you like to see?":
     plot_type = st.selectbox("Choose a plot type:", [
         'Histogram', 'Bar Plot', 'Regression Plot'
     ])
-
-    medium_type = st.selectbox("Choose a medium:", [
-        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
-    ])
-    if medium_type == 'Right Hand':
-        medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
-        color = 'red'
-    elif medium_type == 'Left Hand':
-        medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
-        color = 'green'
-    elif medium_type == 'Object A':
-        medium = df.loc[df['Object'] == 'A', [plot_metric]]
-        color = 'blue'
-    elif medium_type == 'Object B':
-        medium = df.loc[df['Object'] == 'B', [plot_metric]]
-        color = 'purple'
-    elif medium_type == 'Object C':
-        medium = df.loc[df['Object'] == 'C', [plot_metric]]
-        color = 'orange'
-    elif medium_type == 'Object D':
-        medium = df.loc[df['Object'] == 'D', [plot_metric]]
-        color = 'yellow'
     
 
     if plot_type == 'Histogram':
+        medium_type = st.selectbox("Choose a medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
+    ])
+        if medium_type == 'Right Hand':
+            medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
+            color = 'red'
+        elif medium_type == 'Left Hand':
+            medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
+            color = 'green'
+        elif medium_type == 'Object A':
+            medium = df.loc[df['Object'] == 'A', [plot_metric]]
+            color = 'blue'
+        elif medium_type == 'Object B':
+            medium = df.loc[df['Object'] == 'B', [plot_metric]]
+            color = 'purple'
+        elif medium_type == 'Object C':
+            medium = df.loc[df['Object'] == 'C', [plot_metric]]
+            color = 'orange'
+        elif medium_type == 'Object D':
+            medium = df.loc[df['Object'] == 'D', [plot_metric]]
+            color = 'yellow'
         st.write(f"Histogram for {plot_metric} for Hand")
         fig, ax = plt.subplots()
         sns.histplot(data = df, x=plot_metric, hue='Hand', ax=ax)
@@ -134,6 +133,27 @@ elif option == "Which plot would you like to see?":
     elif plot_type == 'Regression Plot':
         #lh = df[df['Hand'] == 'Left'][plot_metric].reset_index(drop=True)
         #rh = df[df['Hand'] == 'Right'][plot_metric].reset_index(drop=True)
+        medium_type = st.selectbox("Choose a medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
+    ])
+        if medium_type == 'Right Hand':
+            medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
+            color = 'red'
+        elif medium_type == 'Left Hand':
+            medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
+            color = 'green'
+        elif medium_type == 'Object A':
+            medium = df.loc[df['Object'] == 'A', [plot_metric]]
+            color = 'blue'
+        elif medium_type == 'Object B':
+            medium = df.loc[df['Object'] == 'B', [plot_metric]]
+            color = 'purple'
+        elif medium_type == 'Object C':
+            medium = df.loc[df['Object'] == 'C', [plot_metric]]
+            color = 'orange'
+        elif medium_type == 'Object D':
+            medium = df.loc[df['Object'] == 'D', [plot_metric]]
+            color = 'yellow'
         medium_plot1 = st.selectbox("Choose another medium:", [
         'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
         ])
