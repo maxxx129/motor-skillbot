@@ -81,11 +81,42 @@ elif option == "Which plot would you like to see?":
         'Histogram', 'Bar Plot', 'Regression Plot'
     ])
 
+    medium_type = st.selectbox("Choose a medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
+    ])
+    if medium_type == 'Right Hand':
+        medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
+        color = 'red'
+    elif medium_type == 'Left Hand':
+        medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
+        color = 'green'
+    elif medium_type == 'Object A':
+        medium = df.loc[df['Object'] == 'A', [plot_metric]]
+        color = 'blue'
+    elif medium_type == 'Object B':
+        medium = df.loc[df['Object'] == 'B', [plot_metric]]
+        color = 'purple'
+    elif medium_type == 'Object C':
+        medium = df.loc[df['Object'] == 'C', [plot_metric]]
+        color = 'orange'
+    elif medium_type == 'Object D':
+        medium = df.loc[df['Object'] == 'D', [plot_metric]]
+        color = 'yellow'
+    
+
     if plot_type == 'Histogram':
-        st.write(f"Histogram for {plot_metric}")
+        st.write(f"Histogram for {plot_metric} for Hand")
         fig, ax = plt.subplots()
-        sns.histplot(data=df, x=plot_metric, hue='Hand', ax=ax)
+        sns.histplot(data = df, x=plot_metric, hue='Hand', ax=ax)
         st.pyplot(fig)
+        st.write(f"Histogram for {plot_metric} for Object")
+        fig1, ax1 = plt.subplots()
+        sns.histplot(data = df, x=plot_metric, hue='Object', ax=ax1)
+        st.pyplot(fig1)
+        st.write(f"Histogram for {plot_metric} for {medium_type}")
+        fig2, ax2 = plt.subplots()
+        sns.histplot(data = medium, x=plot_metric, color = color, ax=ax2)
+        st.pyplot(fig2)
         st.info("📊 That’s one colorful distribution!")
 
     elif plot_type == 'Bar Plot':
@@ -95,18 +126,39 @@ elif option == "Which plot would you like to see?":
                           var_name='Metric', value_name='Value')
         subset = df_long[df_long['Metric'] == plot_metric]
         st.write("Comparing participants by hand and object")
+        #fig = sns.barplot(data = subset, x = 'ppid', y = 'Value', hue = 'Hand')
         fig = sns.catplot(data=subset, x='ppid', y='Value', hue='Hand', col='Object', kind='bar')
         st.pyplot(fig)
         st.success("Nice! Bar plots are great for comparison.")
 
     elif plot_type == 'Regression Plot':
-        lh = df[df['Hand'] == 'Left'][plot_metric].reset_index(drop=True)
-        rh = df[df['Hand'] == 'Right'][plot_metric].reset_index(drop=True)
-        min_len = min(len(lh), len(rh))
+        #lh = df[df['Hand'] == 'Left'][plot_metric].reset_index(drop=True)
+        #rh = df[df['Hand'] == 'Right'][plot_metric].reset_index(drop=True)
+        medium_plot1 = st.selectbox("Choose another medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
+        ])
+        
+        if medium_type == medium_plot1:
+            st.write('Please choose another medium')
+
+        if medium_plot1 == 'Right Hand':
+            medium1 = df.loc[df['Hand'] == 'Right', [plot_metric]]
+        elif medium_plot1 == 'Left Hand':
+            medium1 = df.loc[df['Hand'] == 'Left', [plot_metric]]
+        elif medium_plot1 == 'Object A':
+            medium1 = df.loc[df['Object'] == 'A', [plot_metric]]
+        elif medium_plot1 == 'Object B':
+            medium1 = df.loc[df['Object'] == 'B', [plot_metric]]
+        elif medium_plot1 == 'Object C':
+            medium1 = df.loc[df['Object'] == 'C', [plot_metric]]
+        elif medium_plot1 == 'Object D':
+            medium1 = df.loc[df['Object'] == 'D', [plot_metric]]
+
+        min_len = min(len(medium), len(medium1))
         fig, ax = plt.subplots()
-        sns.regplot(x=rh[:min_len], y=lh[:min_len], ax=ax)
-        ax.set_xlabel("Right Hand")
-        ax.set_ylabel("Left Hand")
+        sns.regplot(x=medium[:min_len], y=medium1[:min_len], color = color, ax=ax)
+        ax.set_xlabel(medium_type)
+        ax.set_ylabel(medium_plot1)
         ax.set_title(f"Regression: {plot_metric}")
         st.pyplot(fig)
         st.info("🧠 Are we seeing any patterns here?")
