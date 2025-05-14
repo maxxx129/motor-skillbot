@@ -106,32 +106,64 @@ elif option == "Which plot would you like to see?":
         'Histogram', 'Bar Plot', 'Regression Plot'
     ])
 
+    medium_type = st.selectbox("Choose a medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'])
+
+    if medium_type == 'Right Hand':
+        medium = df[df['Hand'] == 'Right'][plot_metric]
+        color = 'red'
+    elif medium_type == 'Left Hand':
+        medium = df[df['Hand'] == 'Left'][plot_metric]
+        color = 'green'
+    elif medium_type == 'Object A':
+        medium = df[df['Object'] == 'A'][plot_metric]
+        color = 'blue'
+    elif medium_type == 'Object B':
+        medium = df[df['Object'] == 'B'][plot_metric]
+        color = 'purple'
+    elif medium_type == 'Object C':
+        medium = df[df['Object'] == 'C'][plot_metric]
+        color = 'orange'
+    elif medium_type == 'Object D':
+        medium = df[df['Object'] == 'D'][plot_metric]
+        color = 'yellow'
+
     if plot_type == 'Histogram':
         fig, ax = plt.subplots()
-        sns.histplot(data=df, x=plot_metric, hue='Hand', ax=ax)
+        sns.histplot(medium, color=color, ax=ax)
+        ax.set_title(f"Histogram for {plot_metric} ({medium_type})")
         st.pyplot(fig)
-        fig2, ax2 = plt.subplots()
-        sns.histplot(data=df, x=plot_metric, hue='Object', ax=ax2)
-        st.pyplot(fig2)
 
     elif plot_type == 'Bar Plot':
         df_long = pd.melt(df, id_vars=['ppid', 'Hand', 'Object'],
                           value_vars=['Button_Release_Time', 'MT_to_obj',
                                       'MT_obj_to_tar', 'Total_MT', 'Total_Time'],
                           var_name='Metric', value_name='Value')
-        subset = df_long[df_long['Metric'] == plot_metric]
+        subset = df_long[(df_long['Metric'] == plot_metric) & (df_long['Object'] == medium_type[-1] if 'Object' in medium_type else df_long['Hand'] == medium_type.split()[0])]
         fig = sns.catplot(data=subset, x='ppid', y='Value', hue='Hand', col='Object', kind='bar')
         st.pyplot(fig)
 
     elif plot_type == 'Regression Plot':
-        medium1 = df[df['Hand'] == 'Left'][plot_metric].reset_index(drop=True)
-        medium2 = df[df['Hand'] == 'Right'][plot_metric].reset_index(drop=True)
-        min_len = min(len(medium1), len(medium2))
+        secondary_type = st.selectbox("Compare with:", [
+            'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'])
+
+        def get_data(label):
+            if label == 'Right Hand':
+                return df[df['Hand'] == 'Right'][plot_metric].reset_index(drop=True)
+            elif label == 'Left Hand':
+                return df[df['Hand'] == 'Left'][plot_metric].reset_index(drop=True)
+            elif label.startswith('Object'):
+                obj = label[-1]
+                return df[df['Object'] == obj][plot_metric].reset_index(drop=True)
+
+        y_data = get_data(medium_type)
+        x_data = get_data(secondary_type)
+        min_len = min(len(x_data), len(y_data))
         fig, ax = plt.subplots()
-        sns.regplot(x=medium1[:min_len], y=medium2[:min_len], ax=ax)
-        ax.set_xlabel("Left Hand")
-        ax.set_ylabel("Right Hand")
-        ax.set_title(f"Regression: {plot_metric}")
+        sns.regplot(x=x_data[:min_len], y=y_data[:min_len], color=color, ax=ax)
+        ax.set_xlabel(secondary_type)
+        ax.set_ylabel(medium_type)
+        ax.set_title(f"Regression Plot: {plot_metric}")
         st.pyplot(fig)
 
 st.markdown("---")
