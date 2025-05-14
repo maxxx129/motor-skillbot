@@ -23,7 +23,23 @@ option = st.sidebar.selectbox("Pick an option:", [
 
 if option == "Left Hand or Right Hand?":
     st.subheader("🖐️ Left vs Right")
-    st.info("🚧 This feature is under construction! But it's coming soon.")
+    hand = st.selectbox('Are you', ['Left Handed', 'Right Handed', 'Both'])
+    st.write("Are you A.Left handed, B.Right handed, C.Both?")
+    hand_motor = input("Please type in your answer here: ")
+    if hand_motor == 'A':
+        st.write("Fun Fact: 10% - 15% of the population is left handed")
+
+    elif hand_motor == 'B':
+        st.write("Fun Fact: 85% - 90% of the population is right handed")
+            
+
+    elif hand_motor == 'C':
+        st.write("Fun Fact: 1% of the population is ambidextrous, "
+            "& can use both, left and right handed")
+            
+    else:
+        st.write("Please select options A,B, or C")
+    #st.info("🚧 This feature is under construction! But it's coming soon.")
 
 elif option == "About the Motor Skills Response study":
     st.subheader("📚 About the Study")
@@ -32,6 +48,31 @@ elif option == "About the Motor Skills Response study":
     Participants used both hands to interact with objects A, B, C, and D.
     We're analyzing their performance through various metrics. 🧪
     """)
+    motor_impairement = st.selectbox("Would you have any motor skills"
+                                        " impairment/difficulties?", ['Yes', 'No'])
+    if motor_impairement.lower() == 'yes':
+        st.write("Thank you for sharing.")
+    else:
+        st.write("Thank you for your input.")
+
+    genetic_traits = st.selectbox("Do family members have similar "
+                                 "motor skill traits? ", ['Yes', 'No'])
+    if genetic_traits.lower() == 'yes':
+        st.write("Genetics are strong!")
+    else:
+        st.write("Wow, you are unique in your family!")
+        st.write("Next step, you will learn about the "
+        "Motor Skills Response study...")
+        
+        st.write("A total of 15 participants were in this study")
+        
+        st.write("For each participant, 40 trials were completed using "
+        "their left hand and 40 trial using their right hand.")
+        
+        st.write("A total of 80 trials were given to each participant.")
+        
+        all_trials = 15 * 80
+        st.write(f"In total, the dataset indicates {all_trials} trials.")
     st.success("Thanks for being curious! 🤓")
 
 elif option == "Which statistic would you like to see?":
